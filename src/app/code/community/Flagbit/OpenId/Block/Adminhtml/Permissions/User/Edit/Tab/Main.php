@@ -37,8 +37,11 @@ class Flagbit_OpenId_Block_Adminhtml_Permissions_User_Edit_Tab_Main extends Mage
     {
         $return = parent::_prepareForm();
         
+        /* @var $form Varien_Data_Form */
+        $form = $this->getForm();
+        
         /* @var $fieldset Varien_Data_Form_Element_Fieldset */
-        $fieldset = $this->getForm()->getElement('base_fieldset');
+        $fieldset = $form->getElement('base_fieldset');
         
         $fieldset->addField('openid_identifier', 'text', array(
             'name'  => 'openid_identifier',
@@ -46,6 +49,10 @@ class Flagbit_OpenId_Block_Adminhtml_Permissions_User_Edit_Tab_Main extends Mage
             'id'    => 'openid_identifier',
             'title' => Mage::helper('flagbit_openid')->__('OpenId Identifier'),
         ));
+
+        /* @var $model Mage_Admin_Model_User */
+        $model = Mage::registry('permissions_user');
+        $form->addValues(array('openid_identifier' => $model->getData('openid_identifier')));
         
         return $return;
     }
