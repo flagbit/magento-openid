@@ -35,17 +35,24 @@ class Flagbit_OpenId_Model_Admin_Observer extends Mage_Admin_Model_Observer
 {
     public function actionPreDispatchAdmin($event)
     {
+        /* @var $session Mage_Admin_Model_Session */
+        $session = Mage::getSingleton('admin/session');
         $request = Mage::app()->getRequest();
         
         if ('admin' === $request->getModuleName() && 'openid' === $request->getControllerName() && 'login' === $request->getActionName()) {
-            $request->setDispatched(true);
+            if ($postLogin = $request->getPost('login') || 'id_res' === $request->getParam('openid_mode')) {
+                $username = isset($postLogin['openid_identifier']) ? $postLogin['openid_identifier'] : '';
+                $user = $session->login($username, '', $request);
+                // TODO: add error handling
+            }
+            else {
+                $request->setDispatched(true);
+            }
         }
         else {
             return parent::actionPreDispatchAdmin($event);
         }
         
-        /* @var $session Mage_Admin_Model_Session */
-        $session = Mage::getSingleton('admin/session');
         $session->refreshAcl();
     }
 }

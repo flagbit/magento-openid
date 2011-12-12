@@ -33,4 +33,40 @@
  */
 class Flagbit_OpenId_Model_Admin_Session extends Mage_Admin_Model_Session
 {
+
+    /**
+     * Try to login user in admin
+     *
+     * @param  string $username
+     * @param  string $password
+     * @param  Mage_Core_Controller_Request_Http $request
+     * @return Mage_Admin_Model_User|null
+     */
+    public function login($username, $password, $request = null)
+    {
+        if ($request instanceof Mage_Core_Controller_Request_Http) {
+            if ($postLogin = $request->getPost('login') && isset($postLogin['openid_identifier']) && $username === $postLogin['openid_identifier']) {
+                $consumer = new Zend_OpenId_Consumer();
+                if (!$consumer->login($login['openid_identifier'])) {
+                    throw new Exception('login failed');
+                }
+            }
+            
+            $identity = null;
+            if ('id_res' === $request->getParam('openid_mode')) {
+                $consumer = new Zend_OpenId_Consumer();
+                // idenitity will be returned by reference
+                if (!$consumer->verify($request->getParams(), $identity)) {
+                    throw new Exception('verification failed');
+                }
+                
+                // valid login - all fine: now let's fake a login for magento
+                /* @var $user Mage_Admin_Model_User */
+                $user = Mage::getModel('admin/user');
+                // TODO load user and verify openid identifier and pass it on to parent::login()
+            }
+        }
+        
+        return parent::login($username, $password, $request);
+    }
 }
