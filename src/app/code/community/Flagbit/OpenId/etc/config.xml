@@ -36,6 +36,7 @@
                 <class>Flagbit_OpenId_Helper</class>
             </flagbit_openid>
         </helpers>
+        
         <models>
             <flagbit_openid>
                 <class>Flagbit_OpenId_Model</class>
@@ -51,6 +52,14 @@
                 </rewrite>
             </admin>
         </models>
+        
+        <resources>
+            <flagbit_openid_setup>
+                <setup>
+                    <module>Flagbit_OpenId</module>
+                </setup>
+            </flagbit_openid_setup>
+        </resources>
     </global>
 
     <!--
@@ -60,13 +69,6 @@
                 <class>Flagbit_Googleauthenticator_Block</class>
             </flagbit_googleauthenticator>
         </blocks>
-        <resources>
-            <googleauthenticator_setup>
-                <setup>
-                    <module>Flagbit_Googleauthenticator</module>
-                </setup>
-            </googleauthenticator_setup>
-        </resources>
     </global>
     <adminhtml>
         <events>
