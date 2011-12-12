@@ -45,25 +45,54 @@ class Flagbit_OpenId_Model_Admin_Session extends Mage_Admin_Model_Session
     public function login($username, $password, $request = null)
     {
         if ($request instanceof Mage_Core_Controller_Request_Http) {
-            if ($postLogin = $request->getPost('login') && isset($postLogin['openid_identifier']) && $username === $postLogin['openid_identifier']) {
-                $consumer = new Zend_OpenId_Consumer();
-                if (!$consumer->login($login['openid_identifier'])) {
-                    throw new Exception('login failed');
-                }
-            }
-            
-            $identity = null;
-            if ('id_res' === $request->getParam('openid_mode')) {
-                $consumer = new Zend_OpenId_Consumer();
-                // idenitity will be returned by reference
-                if (!$consumer->verify($request->getParams(), $identity)) {
-                    throw new Exception('verification failed');
+            try {
+                if (($postLogin = $request->getPost('login')) && isset($postLogin['openid_identifier']) && $username === $postLogin['openid_identifier']) {
+                    $consumer = new Zend_OpenId_Consumer();
+                    if (!$consumer->login($username)) {
+                        Mage::throwException(Mage::helper('flagbit_openid')->__('OpenID Login failed.'));
+                    }
                 }
                 
-                // valid login - all fine: now let's fake a login for magento
-                /* @var $user Mage_Admin_Model_User */
-                $user = Mage::getModel('admin/user');
-                // TODO load user and verify openid identifier and pass it on to parent::login()
+                $identity = null;
+                if ('id_res' === $request->getParam('openid_mode')) {
+                    $consumer = new Zend_OpenId_Consumer();
+                    // idenitity will be returned by reference
+                    if (!$consumer->verify($request->getParams(), $identity)) {
+                        Mage::throwException(Mage::helper('flagbit_openid')->__('OpenID Verification failed.'));
+                    }
+                    
+                    /* @var $user Flagbit_OpenId_Model_Admin_User */
+                    $user = Mage::getModel('flagbit_openid/admin_user');
+                    $user->login($identity, $password);
+                    
+                    if ($user->getId()) {
+                        $this->renewSession();
+                        if (Mage::getSingleton('adminhtml/url')->useSecretKey()) {
+                            Mage::getSingleton('adminhtml/url')->renewSecretUrls();
+                        }
+                        $this->setIsFirstPageAfterLogin(true);
+                        $this->setUser($user);
+                        $this->setAcl(Mage::getResourceModel('admin/acl')->loadAcl());
+                        if ($requestUri = $this->_getRequestUri($request)) {
+                            Mage::dispatchEvent('admin_session_user_login_success', array('user' => $user));
+                            header('Location: ' . $requestUri);
+                            exit;
+                        }
+                    }
+                    else {
+                        Mage::throwException(Mage::helper('adminhtml')->__('Invalid Username or Password.'));
+                    }
+                }
+            }
+            catch (Mage_Core_Exception $e) {
+                Mage::dispatchEvent(
+                    'admin_session_user_login_failed',
+                    array('user_name' => $username, 'exception' => $e)
+                );
+                if ($request && !$request->getParam('messageSent')) {
+                    Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                    $request->setParam('messageSent', true);
+                }
             }
         }
         

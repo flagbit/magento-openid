@@ -35,6 +35,11 @@ class Flagbit_OpenId_Adminhtml_OpenidController extends Mage_Adminhtml_Controlle
 {
     public function loginAction()
     {
+        if (Mage::getSingleton('admin/session')->isLoggedIn()) {
+            $this->_redirect('*');
+            return;
+        }
+        
         $this->_initLayoutMessages('adminhtml/session');
         $block = $this->getLayout()->createBlock('adminhtml/template');
         $block->setTemplate('flagbit_openid/login.phtml');

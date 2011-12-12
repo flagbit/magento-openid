@@ -50,9 +50,11 @@
                 <class>Flagbit_OpenId_Model</class>
                 <resourceModel>flagbit_openid_resource</resourceModel>
             </flagbit_openid>
+            
             <flagbit_openid_resource>
                 <class>Flagbit_OpenId_Model_Resource</class>
             </flagbit_openid_resource>
+            
             <admin>
                 <rewrite>
                     <observer>Flagbit_OpenId_Model_Admin_Observer</observer>
@@ -69,20 +71,4 @@
             </flagbit_openid_setup>
         </resources>
     </global>
-
-    <!--
-    <adminhtml>
-        <events>
-            <core_block_abstract_prepare_layout_after>
-                <observers>
-                    <flagbit_googleauthenticator>
-                        <class>flagbit_googleauthenticator/observer
-                        </class>
-                        <method>addUserAuthTab</method>
-                    </flagbit_googleauthenticator>
-                </observers>
-            </core_block_abstract_prepare_layout_after>
-        </events>
-    </adminhtml>
-    -->
 </config>

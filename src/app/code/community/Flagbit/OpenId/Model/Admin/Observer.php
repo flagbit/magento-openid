@@ -40,10 +40,9 @@ class Flagbit_OpenId_Model_Admin_Observer extends Mage_Admin_Model_Observer
         $request = Mage::app()->getRequest();
         
         if ('admin' === $request->getModuleName() && 'openid' === $request->getControllerName() && 'login' === $request->getActionName()) {
-            if ($postLogin = $request->getPost('login') || 'id_res' === $request->getParam('openid_mode')) {
+            if (($postLogin = $request->getPost('login')) || 'id_res' === $request->getParam('openid_mode')) {
                 $username = isset($postLogin['openid_identifier']) ? $postLogin['openid_identifier'] : '';
                 $user = $session->login($username, '', $request);
-                // TODO: add error handling
             }
             else {
                 $request->setDispatched(true);
