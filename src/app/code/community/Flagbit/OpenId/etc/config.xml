@@ -5,6 +5,34 @@
             <version>1.6.0.0</version>
         </Flagbit_OpenId>
     </modules>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Flagbit_OpenId before="Mage_Adminhtml">Flagbit_OpenId_Adminhtml</Flagbit_OpenId>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    
+    <global>
+        <helpers>
+            <flagbit_openid>
+                <class>Flagbit_OpenId_Helper</class>
+            </flagbit_openid>
+        </helpers>
+        <models>
+            <admin>
+                <rewrite>
+                    <observer>Flagbit_OpenId_Model_Admin_Observer</observer>
+                </rewrite>
+            </admin>
+        </models>
+    </global>
+    
     <!-- 
     <global>
         <blocks>
@@ -36,19 +64,6 @@
             </googleauthenticator_setup>
         </resources>
     </global>
-    <admin>
-        <routers>
-            <adminhtml>
-                <args>
-                    <modules>
-                        <Flagbit_Googleauthenticator
-                            before="Mage_Adminhtml">Flagbit_Googleauthenticator_Adminhtml
-                        </Flagbit_Googleauthenticator>
-                    </modules>
-                </args>
-            </adminhtml>
-        </routers>
-    </admin>
     <adminhtml>
         <events>
             <core_block_abstract_prepare_layout_after>
