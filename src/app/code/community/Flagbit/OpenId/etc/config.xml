@@ -19,6 +19,17 @@
     </admin>
 
     <adminhtml>
+        <events>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <flagbit_openid>
+                        <class>flagbit_openid/observer</class>
+                        <method>coreBlockAbstractToHtmlAfter</method>
+                    </flagbit_openid>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>
+
         <translate>
             <modules>
                 <Flagbit_OpenId>
