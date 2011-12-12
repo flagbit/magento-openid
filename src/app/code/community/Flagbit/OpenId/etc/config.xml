@@ -31,12 +31,20 @@
     </adminhtml>
 
     <global>
+        <blocks>
+            <adminhtml>
+                <rewrite>
+                    <permissions_user_edit_tab_main>Flagbit_OpenId_Block_Adminhtml_Permissions_User_Edit_Tab_Main</permissions_user_edit_tab_main>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+
         <helpers>
             <flagbit_openid>
                 <class>Flagbit_OpenId_Helper</class>
             </flagbit_openid>
         </helpers>
-        
+
         <models>
             <flagbit_openid>
                 <class>Flagbit_OpenId_Model</class>
@@ -52,7 +60,7 @@
                 </rewrite>
             </admin>
         </models>
-        
+
         <resources>
             <flagbit_openid_setup>
                 <setup>
@@ -63,13 +71,6 @@
     </global>
 
     <!--
-    <global>
-        <blocks>
-            <flagbit_googleauthenticator>
-                <class>Flagbit_Googleauthenticator_Block</class>
-            </flagbit_googleauthenticator>
-        </blocks>
-    </global>
     <adminhtml>
         <events>
             <core_block_abstract_prepare_layout_after>
