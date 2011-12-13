@@ -83,6 +83,10 @@ class Flagbit_OpenId_Model_Admin_Session extends Mage_Admin_Model_Session
                         Mage::throwException(Mage::helper('adminhtml')->__('Invalid Username or Password.'));
                     }
                 }
+
+                if ('cancel' === $request->getParam('openid_mode')) {
+                    Mage::throwException(Mage::helper('flagbit_openid')->__('OpenID Login has been canceled.'));
+                }
             }
             catch (Mage_Core_Exception $e) {
                 Mage::dispatchEvent(
