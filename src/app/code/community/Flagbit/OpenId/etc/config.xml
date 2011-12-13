@@ -69,7 +69,6 @@
             <admin>
                 <rewrite>
                     <observer>Flagbit_OpenId_Model_Admin_Observer</observer>
-                    <session>Flagbit_OpenId_Model_Admin_Session</session>
                 </rewrite>
             </admin>
         </models>

@@ -36,7 +36,7 @@ class Flagbit_OpenId_Model_Admin_Observer extends Mage_Admin_Model_Observer
     public function actionPreDispatchAdmin($event)
     {
         /* @var $session Mage_Admin_Model_Session */
-        $session = Mage::getSingleton('admin/session');
+        $session = Mage::getSingleton('flagbit_openid/admin_session');
         $request = Mage::app()->getRequest();
         
         if (!$session->isLoggedIn() && 'admin' === $request->getModuleName() && 'openid' === $request->getControllerName() && 'login' === $request->getActionName()) {
