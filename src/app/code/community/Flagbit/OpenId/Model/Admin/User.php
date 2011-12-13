@@ -36,7 +36,7 @@ class Flagbit_OpenId_Model_Admin_User extends Mage_Admin_Model_User
     public function _construct()
     {
         $return = parent::_construct();
-        $this->_resourceName = 'flagbit_openid/admin_user';
+        $this->_init('flagbit_openid/admin_user');
         return $return;
     }
     
